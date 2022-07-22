@@ -1,0 +1,39 @@
+---
+
+- name: sh run    
+  hosts: pkb_core,tbs_core,srb_core,mks_core,slo_core
+  connection: local
+
+  tasks:
+    - name: backup configuration
+      nxos_command:
+        commands: 
+          - show inventory
+          - show environment
+          - show hardware
+          - show system resource
+          - show version 
+          - show module 
+          - show system internal process cpu
+          - show system internal process mem
+          - show processes cpu history
+          - show vpc config-sync status
+          - show vpc consistency-parameters global
+          - show vpc orphan-ports
+          - show vpc peer-keepalive
+          - show vpc statistics peer-link
+          - show interface status
+          - show interface | in up|CRC
+          - Show interface transceiver details
+          - Show logging  log | in power
+          - Show logging | last 300 
+          - show logging logfile
+        username: yourciscousername
+        password: yourciscopassword
+        timeout: 60
+      register: show_run
+    - name: print hasilnya
+      copy:
+        content: "{{ show_run.stdout[0] + show_run.stdout[1] + show_run.stdout[2] + show_run.stdout[3] + show_run.stdout[4] + show_run.stdout[5] + show_run.stdout[6] + show_run.stdout[7] + show_run.stdout[8] + show_run.stdout[9] + show_run.stdout[10] + show_run.stdout[11] + show_run.stdout[12] + show_run.stdout[13] + show_run.stdout[14] + show_run.stdout[15] + show_run.stdout[16] + show_run.stdout[17] + show_run.stdout[18] + show_run.stdout[19] }}"        
+        dest: "CISCO_CFG/{{ inventory_hostname }}_CORE_HealthCheck_13JULY2021.txt"
+        
