@@ -1,0 +1,49 @@
+---
+
+- name: sh run
+#  hosts: tbs_core,pkb_core,srb_core,mks_core,slo_core
+  hosts: x.x.x.x
+  connection: local
+  serial: 1
+
+  tasks:
+    - name: check port status for core
+      nxos_command:
+        commands:
+           - show hostname
+           - show int status | i down | count
+           - show int status | i susp | count
+           - show int status | i err-dis | count
+           - show int status | i down
+           - show int status | i susp
+           - show int status | i err-dis
+
+        username: yourciscousername
+        password: yourciscopassword
+        transport: cli
+      register: result
+
+    - name : show
+      debug:
+         msg:
+           - "Hostname : {{ result.stdout_lines[0] }}"
+           - "Port Down ( total ) : {{ result.stdout_lines[1] }}"
+           - "Port Suspend ( total ) : {{ result.stdout_lines[2] }}"
+           - "Port Error Disabled ( total ) : {{ result.stdout_lines[3] }}"
+           - "Port Down list : {{ result.stdout_lines[4] }}"
+           - "Port Suspend list : {{ result.stdout_lines[5] }}"
+           - "Port Error Disabled list : {{ result.stdout_lines[6] }}"
+
+    - name : copy to file
+      lineinfile:
+        create: yes
+        insertafter: EOL
+        line: |
+           Hostname : {{ result.stdout_lines[0] | replace('\\n', '\n') }}
+           Port Down ( total ) : {{ result.stdout_lines[1] | replace('\\n', '\n') }}
+           Port Suspend ( total ) : {{ result.stdout_lines[2] | replace('\\n', '\n') }}
+           Port Error Disabled ( total ) : {{ result.stdout_lines[3] | replace('\\n', '\n') }}
+           Port Down list : {{ result.stdout_lines[4] | replace('\\n', '\n') }}
+           Port Suspend list : {{ result.stdout_lines[5] | replace('\\n', '\n') }}
+           Port Error Disabled list : {{ result.stdout_lines[6] | replace('\\n', '\n') }}
+        dest: "CISCO_RESULT/CORE_interface_healthcheck_result_{{ '%Y%m%d_%H:%M' | strftime(ansible_date_time.epoch) }}.txt"
