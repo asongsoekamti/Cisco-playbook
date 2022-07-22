@@ -1,0 +1,21 @@
+[slo_core]
+x.x.x.x	ansible_user=yourciscousername
+x.x.x.x	ansible_user=yourciscousername
+
+[tbs_core]
+x.x.x.x	ansible_user=yourciscousername
+x.x.x.x	ansible_user=yourciscousername
+x.x.x.x	ansible_user=yourciscousername
+x.x.x.x	ansible_user=yourciscousername
+
+[mks_core]
+x.x.x.x ansible_user=yourciscousername
+x.x.x.x ansible_user=yourciscousername
+
+[srb_core]
+x.x.x.x ansible_user=yourciscousername
+x.x.x.x ansible_user=yourciscousername
+
+[pkb_core]
+x.x.x.x ansible_user=yourciscousername
+x.x.x.x ansible_user=yourciscousername
